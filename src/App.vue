@@ -1,85 +1,95 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
+  <div>
+    <div v-for="category in categories" :key="category.id" @drop="onDrop($event, category.id)" class="droppable"
+      @dragover.prevent @dragenter.prevent>
+      <h4>{{ category.title }}</h4>
+      <div v-for="item in items.filter(x => x.categoryId === category.id)" :key="item.id" @dragstart="onDragStart($event, item)"
+        class="draggable" :draggable="true">
+        <h5>{{ item.title }}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
-    </div>
-  </header>
 
-  <RouterView />
+  <RouterView /> -->
 </template>
 
+<script>
+// import { RouterLink, RouterView } from 'vue-router'
+
+export default {
+  data() {
+    return {
+      items: [
+        {
+          id: 0,
+          title: 'Audi',
+          categoryId: 0
+        },
+        {
+          id: 1,
+          title: 'BMW',
+          categoryId: 0
+        },
+        {
+          id: 2,
+          title: 'Cat',
+          categoryId: 1
+        },
+      ],
+      categories: [
+        {
+          id: 0,
+          title: 'Cars'
+        },
+        {
+          id: 1,
+          title: 'Animals'
+        }
+      ]
+    }
+  },
+  methods: {
+    onDragStart(evt, item) {
+      evt.dataTransfer.dropEffect = 'move'
+      evt.dataTransfer.effectAllowed = 'move'
+      evt.dataTransfer.setData('itemId', item.id.toString())
+    },
+    onDrop(evt, categoryId) {
+      const itemId = parseInt(evt.dataTransfer.getData('itemId'))
+      this.items = this.items.map(item => {
+        if (item.id == itemId)
+          item.categoryId = categoryId
+        return item
+      })
+    }
+  }
+}
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.droppable {
+  padding: 15px;
+  border-radius: 5px;
+  background: #2c3e50;
+  margin-bottom: 10px;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.droppable h4 {
+  color: white;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.draggable {
+  background: white;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 5px;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.draggable h5 {
+  margin: 0;
 }
 </style>
