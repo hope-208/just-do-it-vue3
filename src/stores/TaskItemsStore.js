@@ -122,8 +122,6 @@ export const useTasksItemsStore = defineStore({
    return !this.tasksItems[taskId].isDone
   },
   openModal(action, taskId) {
-
-   console.log('%c%s', 'color: #f279ca', action, taskId);
    this.action = action
    if (action == 'add') {
     this.isOpenModalEdit = true
@@ -219,8 +217,6 @@ export const useTasksItemsStore = defineStore({
     this.activeModalValue.description = data.description
 
     if (this.action == 'add') {
-
-     console.log('%c%s', 'color: #99adcc', 'this.activeModalValue', this.activeModalValue);
      this.activeModalValue.createAt = this.getNow()
      this.activeModalValue.id = this.tasksItems.length
      this.tasksItems.push(this.activeModalValue)
@@ -270,8 +266,6 @@ export const useTasksItemsStore = defineStore({
  },
  mutations: {
   deleteTask(state, id) {
-
-   console.log('%c%s', 'color: #7f7700', state, id);
    state.$delete(id);
   }
  }
