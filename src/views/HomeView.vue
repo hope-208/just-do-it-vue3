@@ -18,6 +18,7 @@
       </el-col>
     </el-scrollbar>
     <add-modal-task ref="refModalTask" />
+    <look-modal-task ref="refModalTask" :modalValue="storeTasksItems.activeModalValue"/>
 
   </main>
 </template>
@@ -31,12 +32,14 @@
 
 <script>
   import TaskItem from '@/components/TaskItem.vue';
-  import AddModalTask from '@/components/AddModalTask.vue';
+  import AddModalTask from '@/components/AddModalTask.vue';  
+  import LookModalTask from '@/components/LookModalTask.vue';
   export default {
     name: 'HomeView',
     components: {
       TaskItem,
-      AddModalTask
+      AddModalTask,
+      LookModalTask
     },
     directives: {
       focus: {

@@ -20,23 +20,14 @@ export const useTasksItemsStore = defineStore({
    {
     id: 1,
     title: 'Тестовая задача',
-    description: 'Создана для наполнения. Демонстрация обновления.',
+    description: 'Создана для наполнения.',
     categoryId: 0,
     editableTitle: false,
     editableDesc: false,
     priority: 2,
     date: '05.05.2024',
     createAt: '18.05.2024 19:31',
-    updateAt: [
-     {
-      id: 0,
-      dateChange: "04.06.2024 23:28",
-      actions: {
-       upDescription: "Описание задачи переименовано из 'Создана для наполнения. Демонстрация обновления.' в 'Создана для наполнения. Демонстрация обновления'."
-      }
-     }
-
-    ],
+    updateAt: [],
     isDone: false
    },
    {
@@ -117,9 +108,9 @@ export const useTasksItemsStore = defineStore({
   statusDone(taskId) {
    let actions = {}
    if (this.tasksItems[taskId].isDone) {
-    actions.upIsDone = 'Задача отмечена как выполненная.'
-   } else {
     actions.upIsDone = 'Задача отмечена как невыполненная.'
+   } else {
+    actions.upIsDone = 'Задача отмечена как выполненная.'
    }
    this.historyAction.id = this.tasksItems[taskId].updateAt?.length
    this.historyAction.dateChange = this.getNow()
@@ -131,6 +122,8 @@ export const useTasksItemsStore = defineStore({
    return !this.tasksItems[taskId].isDone
   },
   openModal(action, taskId) {
+
+   console.log('%c%s', 'color: #f279ca', action, taskId);
    this.action = action
    if (action == 'add') {
     this.isOpenModalEdit = true
@@ -221,8 +214,6 @@ export const useTasksItemsStore = defineStore({
    }
   },
   saveModalData(data) {
-
-   console.log('%c%s', 'color: #731d1d', 'data', data);
    if (data.title !== '' && data.description !== '') {
     this.activeModalValue.title = data.title
     this.activeModalValue.description = data.description
@@ -231,7 +222,8 @@ export const useTasksItemsStore = defineStore({
 
      console.log('%c%s', 'color: #99adcc', 'this.activeModalValue', this.activeModalValue);
      this.activeModalValue.createAt = this.getNow()
-     this.tasksItems.unshift(this.activeModalValue)
+     this.activeModalValue.id = this.tasksItems.length
+     this.tasksItems.push(this.activeModalValue)
      this.closeModal()
     }
     else if (this.action == 'edit') {
@@ -272,10 +264,15 @@ export const useTasksItemsStore = defineStore({
    this.activeId = null
    this.action = ''
   },
-  deleteTask(taskId, evt) {
+  // deleteTask(taskId) {
+  //  this.tasksItems.splice(taskId, 1)
+  // }
+ },
+ mutations: {
+  deleteTask(state, id) {
 
-   console.log('%c%s', 'color: #006dcc', taskId, evt);
-   this.tasksItems.splice(taskId, 1)
+   console.log('%c%s', 'color: #7f7700', state, id);
+   state.$delete(id);
   }
  }
 

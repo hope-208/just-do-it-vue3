@@ -7,7 +7,6 @@
       </div>
     </template>
     <el-form ref="refTaskForm" :model="taskForm" :rules="rulesTask">
-      {{ taskForm }}
       <el-form-item class="form-label" label="Название" prop="title">
         <el-input v-model="taskForm.title" placeholder="Введите название задачи" clearable />
       </el-form-item>

@@ -72,7 +72,14 @@ line-height: normal;
   float: left;
 }
 
+.task__btn {
+  cursor: pointer;
+}
 .form-label > .el-form-item__label {
   width: 90px;
   justify-content: flex-start;
+}
+
+.el-popover.el-popper {
+  min-width: 50px !important;
 }
