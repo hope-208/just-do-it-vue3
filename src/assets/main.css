@@ -1,35 +1,78 @@
 @import './base.css';
 
+:root {
+  --el-color-success: #2EC995 !important;
+}
+
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  width: 100%;
+  height: 100vh;
+  padding: 0 40px;
+  background-color: var(--el-color-white);
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+.header-task-container {
+  margin: 20px 20px 0;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.header-task-container__btn {
+  margin-left: auto;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+.task-container {
+  display: flex !important;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.task.is-always-shadow {
+  box-shadow: var(--el-box-shadow-lighter);
+}
+
+.task__content {
+justify-content: space-between;
+}
+
+.task__check,
+.task__check > .el-checkbox__input > .el-checkbox__inner {
+  width: 20px;
+    height: 20px;
+    border-radius: 10px;
+}
+
+.el-checkbox__input.is-checked > .el-checkbox__inner {
+  background-color: var(--el-color-success) !important;
+    border-color: var(--el-color-success) !important;
+}
+
+.el-checkbox__inner:hover {
+  border-color: var(--el-color-success) !important; 
+}
+
+.task__check > .el-checkbox__input > .el-checkbox__inner::after {
+  width: 5px;
+  height: 10px;
+  left: 6px;
+  top: 2px;
+}
+
+.task__edit {
+  width: calc(100% - 40px);
+  margin-bottom: 10px !important;
+}
+
+.el-text {
+line-height: normal;
+}
+
+.task__btns {
+  position: absolute;
+  right: 0;
+  float: left;
+}
+
+.form-label > .el-form-item__label {
+  width: 90px;
+  justify-content: flex-start;
 }

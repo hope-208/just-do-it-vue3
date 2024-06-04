@@ -6,37 +6,49 @@ export const useTasksItemsStore = defineStore({
   tasksItems: [
    {
     id: 0,
-    title: 'Audi',
-    description: 'desk Audi',
+    title: 'Разработать минимальный набор для менеджера задач',
+    description: 'Функционал: добавление, удаление, получение списка задач, получение одной записи, изменение записи. Запись должна состоять из следующих полей: заголовок, описание, время создания, время изменения, маркер выполнения.',
     categoryId: 0,
-    editable: false,
+    editableTitle: false,
+    editableDesc: false,
     priority: 1,
     date: '',
-    createAt: '18.05.2024 19:30',
+    createAt: '18.05.2024 19:31',
     updateAt: [],
-    isDone: false
+    isDone: true
    },
    {
     id: 1,
-    title: 'BMW',
-    description: 'desk',
+    title: 'Тестовая задача',
+    description: 'Создана для наполнения. Демонстрация обновления.',
     categoryId: 0,
-    editable: false,
+    editableTitle: false,
+    editableDesc: false,
     priority: 2,
     date: '05.05.2024',
-    createAt: '18.05.2024 19:30',
-    updateAt: [],
+    createAt: '18.05.2024 19:31',
+    updateAt: [
+     {
+      id: 0,
+      dateChange: "04.06.2024 23:28",
+      actions: {
+       upDescription: "Описание задачи переименовано из 'Создана для наполнения. Демонстрация обновления.' в 'Создана для наполнения. Демонстрация обновления'."
+      }
+     }
+
+    ],
     isDone: false
    },
    {
     id: 2,
-    title: 'Cat',
-    description: 'desk Cat',
+    title: 'Доработать проект',
+    description: 'Добавить группировку задач по категориям, возможность добавления подзадач, расстановки приоритетов.',
     categoryId: 1,
-    editable: false,
+    editableTitle: false,
+    editableDesc: false,
     priority: 3,
     date: '',
-    createAt: '18.05.2024 19:30',
+    createAt: '18.05.2024 19:32',
     updateAt: [],
     isDone: false
    },
@@ -46,7 +58,8 @@ export const useTasksItemsStore = defineStore({
    title: '',
    description: '',
    categoryId: null,
-   editable: false,
+   editableTitle: false,
+   editableDesc: false,
    priority: 3,
    date: '',
    createAt: '',
@@ -64,30 +77,68 @@ export const useTasksItemsStore = defineStore({
   historyAction: {}
  }),
  actions: {
-  statusEditable(taskId) {
-   return this.tasksItems[taskId].editable = !this.tasksItems[taskId].editable
+  statusEditableTitle(taskId, data) {
+   if (data !== '') {
+    if (data && this.tasksItems[taskId].title !== data) {
+     let actions = {}
+     this.tasksItems[taskId].title = data
+     actions.upTitle = `Задача переименована
+    из "${this.tasksItems[taskId].description}" в "${data}".`
+     this.historyAction.id = this.tasksItems[taskId].updateAt?.length
+     this.historyAction.dateChange = this.getNow()
+     this.historyAction.actions = actions
+     this.tasksItems[taskId].updateAt.push(this.historyAction)
+     this.historyAction = {}
+     actions = {}
+    }
+    this.tasksItems[taskId].editableTitle = !this.tasksItems[taskId].editableTitle
+   }
+   return
+
+  },
+  statusEditableDesc(taskId, data) {
+   if (data !== '') {
+    if (data && this.tasksItems[taskId].description !== data) {
+     let actions = {}
+     this.tasksItems[taskId].description = data
+     actions.upDescription = `Описание задачи переименовано
+    из "${this.tasksItems[taskId].description}" в "${data}".`
+     this.historyAction.id = this.tasksItems[taskId].updateAt?.length
+     this.historyAction.dateChange = this.getNow()
+     this.historyAction.actions = actions
+     this.tasksItems[taskId].updateAt.push(this.historyAction)
+     this.historyAction = {}
+     actions = {}
+    }
+    this.tasksItems[taskId].editableDesc = !this.tasksItems[taskId].editableDesc
+   }
+   return
   },
   statusDone(taskId) {
-   //this.tasksItems[taskId].isDone = !this.tasksItems[taskId].isDone
+   let actions = {}
+   if (this.tasksItems[taskId].isDone) {
+    actions.upIsDone = 'Задача отмечена как выполненная.'
+   } else {
+    actions.upIsDone = 'Задача отмечена как невыполненная.'
+   }
+   this.historyAction.id = this.tasksItems[taskId].updateAt?.length
+   this.historyAction.dateChange = this.getNow()
+   this.historyAction.actions = actions
+   this.tasksItems[taskId].updateAt.push(this.historyAction)
+   this.historyAction = {}
+   actions = {}
+
    return !this.tasksItems[taskId].isDone
   },
-  dropTask(categoryId, taskId) {
-
-   console.log('%c%s', 'color: #f200e2', 'taskId, categoryId', categoryId, taskId);
-   return this.tasksItems[taskId].categoryId = categoryId
-  },
-  openModal(action, categoryId, taskId) {
-
+  openModal(action, taskId) {
    this.action = action
-
-   console.log('%c%s', 'color: #d90000', action, categoryId, taskId);
    if (action == 'add') {
     this.isOpenModalEdit = true
     this.activeId = this.tasksItems.length
     this.titleModal = 'Добавить задачу'
     this.btnModal = 'Добавить'
     this.newItem.id = this.activeId
-    this.newItem.categoryId = categoryId
+    this.newItem.categoryId = 0
     this.activeModalValue = this.newItem
 
    } else if (action == 'edit') {
@@ -172,29 +223,30 @@ export const useTasksItemsStore = defineStore({
   saveModalData(data) {
 
    console.log('%c%s', 'color: #731d1d', 'data', data);
-   this.historyChanges(data)
-   this.activeModalValue.title = data.title
-   this.activeModalValue.description = data.description
-   this.activeModalValue.categoryId = data.categoryId
-   this.activeModalValue.priority = data.priority
-   this.activeModalValue.date = data.date
+   if (data.title !== '' && data.description !== '') {
+    this.activeModalValue.title = data.title
+    this.activeModalValue.description = data.description
 
-   if (this.action == 'add') {
-    this.activeModalValue.createAt = this.getNow()
-    this.tasksItems.unshift(this.activeModalValue)
-    this.closeModal()
+    if (this.action == 'add') {
+
+     console.log('%c%s', 'color: #99adcc', 'this.activeModalValue', this.activeModalValue);
+     this.activeModalValue.createAt = this.getNow()
+     this.tasksItems.unshift(this.activeModalValue)
+     this.closeModal()
+    }
+    else if (this.action == 'edit') {
+     this.historyChanges(data)
+     this.activeModalValue.updateAt.push(this.historyAction)
+     this.tasksItems[this.activeId] = this.activeModalValue
+     this.closeModal()
+    } else {
+     this.action == 'edit'
+     this.historyChanges(data)
+     this.openModal(this.action, data.categoryId, data.taskId)
+     return
+    }
    }
-   else if (this.action == 'edit') {
-
-    this.activeModalValue.updateAt.push(this.historyAction)
-    this.tasksItems[this.activeId] = this.activeModalValue
-    this.closeModal()
-   } else {
-    this.action == 'edit'
-    this.openModal(this.action, data.categoryId, data.taskId)
-    return
-   }
-
+   return
   },
   closeModal() {
    this.isOpenModalLook = false
@@ -206,7 +258,8 @@ export const useTasksItemsStore = defineStore({
     title: '',
     description: '',
     categoryId: null,
-    editable: false,
+    editableTitle: false,
+    editableDesc: false,
     priority: 3,
     date: '',
     createAt: '',
@@ -219,9 +272,9 @@ export const useTasksItemsStore = defineStore({
    this.activeId = null
    this.action = ''
   },
-  deleteTask(taskId) {
+  deleteTask(taskId, evt) {
 
-   console.log('%c%s', 'color: #006dcc', taskId);
+   console.log('%c%s', 'color: #006dcc', taskId, evt);
    this.tasksItems.splice(taskId, 1)
   }
  }
