@@ -1,9 +1,16 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
 <template>
   <main>
-    <TheWelcome />
+    <task-category />
   </main>
 </template>
+
+
+
+<script>
+import TaskCategory from '@/components/TaskCategory.vue';
+
+export default {
+  name: 'HomeView',
+  components: { TaskCategory }
+}
+</script>
