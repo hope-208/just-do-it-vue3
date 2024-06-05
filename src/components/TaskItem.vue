@@ -6,6 +6,8 @@
       </el-col>
       <el-col :span="23">
         <el-form ref="refTask" :model="taskForm" :rules="rulesTask">
+          {{ storeTasksItems.tasksItems[task] }} 
+          {{ taskForm }}
           <el-row>
             <el-form-item prop="title" class="task__edit">
               <el-input v-if="storeTasksItems.tasksItems[task].editableTitle" v-model="taskForm.title"

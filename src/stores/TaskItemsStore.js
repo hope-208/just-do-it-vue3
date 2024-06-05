@@ -5,7 +5,6 @@ export const useTasksItemsStore = defineStore({
  state: () => ({
   tasksItems: [
    {
-    id: 0,
     title: 'Разработать минимальный набор для менеджера задач',
     description: 'Функционал: добавление, удаление, получение списка задач, получение одной записи, изменение записи. Запись должна состоять из следующих полей: заголовок, описание, время создания, время изменения, маркер выполнения.',
     categoryId: 0,
@@ -18,7 +17,6 @@ export const useTasksItemsStore = defineStore({
     isDone: true
    },
    {
-    id: 1,
     title: 'Тестовая задача',
     description: 'Создана для наполнения.',
     categoryId: 0,
@@ -31,7 +29,6 @@ export const useTasksItemsStore = defineStore({
     isDone: false
    },
    {
-    id: 2,
     title: 'Доработать проект',
     description: 'Добавить группировку задач по категориям, возможность добавления подзадач, расстановки приоритетов.',
     categoryId: 1,
@@ -45,7 +42,6 @@ export const useTasksItemsStore = defineStore({
    },
   ],
   newItem: {
-   id: null,
    title: '',
    description: '',
    categoryId: null,
@@ -128,7 +124,6 @@ export const useTasksItemsStore = defineStore({
     this.activeId = this.tasksItems.length
     this.titleModal = 'Добавить задачу'
     this.btnModal = 'Добавить'
-    this.newItem.id = this.activeId
     this.newItem.categoryId = 0
     this.activeModalValue = this.newItem
 
@@ -260,13 +255,8 @@ export const useTasksItemsStore = defineStore({
    this.activeId = null
    this.action = ''
   },
-  // deleteTask(taskId) {
-  //  this.tasksItems.splice(taskId, 1)
-  // }
- },
- mutations: {
-  deleteTask(state, id) {
-   state.$delete(id);
+  deleteTask(taskId) {
+   this.tasksItems.splice(taskId, 1)
   }
  }
 

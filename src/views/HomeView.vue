@@ -12,7 +12,7 @@
       <el-col class="task-container">
         <!-- <el-input v-model="searchTask" placeholder="Введите ключевое слово для поиска по задачам" prefix-icon="Search"
           @input="filtredTask()" /> -->
-        <task-item v-for="item in storeTasksItems.tasksItems" :key="item.id" :task="item.id" :task-info="item" />
+        <task-item v-for="(item, key) in storeTasksItems.tasksItems" :key="item" :task="key" :task-info="item" />
         <!-- <task-item v-for="item in filtredTaskItems" :key="item.id" :task="item.id" :task-info="item" /> -->
         <el-text v-if="storeTasksItems.tasksItems.length == 0">Задачи отсутствуют.</el-text>
       </el-col>
