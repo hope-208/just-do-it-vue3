@@ -1,9 +1,9 @@
 <template>
 
-  <el-dialog v-model="storeTasksItems.isOpenModalEdit" width="50%" @close="storeTasksItems.closeModal, resetForm()">
+  <el-dialog v-model="isOpenModalEdit" width="50%" @close="closeModal, resetForm()">
     <template #header>
       <div class="my-header">
-        <h4 class="header-popup">{{ storeTasksItems.titleModal }}</h4>
+        <h4 class="header-popup">{{ titleModal }}</h4>
       </div>
     </template>
     <el-form ref="refTaskForm" :model="taskForm" :rules="rulesTask">
@@ -12,28 +12,28 @@
       </el-form-item>
 
       <el-form-item class="form-label" label="Описание" prop="description">
-        <el-input v-model="taskForm.description" :rows="3" type="textarea" placeholder="Введите описание задачи" />
+        <el-input v-model="taskForm.description" :rows="3" type="textarea" placeholder="Введите описание задачи"
+          :autofocus="false" />
       </el-form-item>
     </el-form>
     <template #footer>
       <div>
-        <el-button @click="storeTasksItems.closeModal(), resetForm()">Отмена</el-button>
-        <el-button type="primary" @click="storeTasksItems.saveModalData(taskForm), submitForm()">
-          {{ storeTasksItems.btnModal }}
+        <el-button @click="closeModal(), resetForm()">Отмена</el-button>
+        <el-button type="primary" @click="saveModalData(taskForm), submitForm()">
+          {{ btnModal }}
         </el-button>
       </div>
     </template>
   </el-dialog>
 </template>
 
-<script setup>
+<script>
+  import {
+    storeToRefs
+  } from 'pinia'
   import {
     useTasksItemsStore
   } from '@/stores/TaskItemsStore'
-  const storeTasksItems = useTasksItemsStore()
-</script>
-
-<script>
   export default {
     name: 'AddModalTask',
     data() {
@@ -44,28 +44,35 @@
         },
         rulesTask: {
           title: [{
-              required: true,
-              message: 'Название задачи не может быть пустым.',
-              trigger: 'blur'
-            },
-            {
-              min: 3,
-              message: 'Минимальное количество символов: 3.',
-              trigger: 'blur'
-            }
-          ],
+            required: true,
+            message: 'Название задачи не может быть пустым.',
+            trigger: 'blur'
+          }],
           description: [{
-              required: true,
-              message: 'Описание задачи не может быть пустым.',
-              trigger: 'blur'
-            },
-            {
-              min: 3,
-              message: 'Минимальное количество символов: 3.',
-              trigger: 'blur'
-            }
-          ],
+            required: true,
+            message: 'Описание задачи не может быть пустым.',
+            trigger: 'blur'
+          }],
         }
+      }
+    },
+    setup() {
+      const storeTasksItems = useTasksItemsStore()
+      const {
+        isOpenModalEdit,
+        titleModal,
+        btnModal
+      } = storeToRefs(storeTasksItems)
+      const {
+        closeModal,
+        saveModalData
+      } = storeTasksItems
+      return {
+        isOpenModalEdit,
+        titleModal,
+        btnModal,
+        closeModal,
+        saveModalData
       }
     },
     methods: {

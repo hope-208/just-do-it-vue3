@@ -61,8 +61,13 @@ export const useTasksItemsStore = defineStore({
   btnModal: '',
   activeId: null,
   action: '',
-  historyAction: {}
+  historyAction: {},
+  searchTaskParams: '',
+  filteredTaskItems: []
  }),
+ // getters: {
+ //  filtredTask: (state, keyVal) => state.tasksItems.forEach(item => { item.title.includes(keyVal) || item.description.includes(keyVal) }),
+ // },
  actions: {
   statusEditableTitle(taskId, data) {
    if (data !== '') {
@@ -79,6 +84,7 @@ export const useTasksItemsStore = defineStore({
      actions = {}
     }
     this.tasksItems[taskId].editableTitle = !this.tasksItems[taskId].editableTitle
+    this.filteredTask(this.searchTaskParams)
    }
    return
 
@@ -98,6 +104,7 @@ export const useTasksItemsStore = defineStore({
      actions = {}
     }
     this.tasksItems[taskId].editableDesc = !this.tasksItems[taskId].editableDesc
+    this.filteredTask(this.searchTaskParams)
    }
    return
   },
@@ -213,21 +220,22 @@ export const useTasksItemsStore = defineStore({
 
     if (this.action == 'add') {
      this.activeModalValue.createAt = this.getNow()
-     this.activeModalValue.id = this.tasksItems.length
+     // this.activeModalValue.id = this.tasksItems.length
      this.tasksItems.push(this.activeModalValue)
      this.closeModal()
+     this.filteredTask(this.searchTaskParams)
     }
-    else if (this.action == 'edit') {
-     this.historyChanges(data)
-     this.activeModalValue.updateAt.push(this.historyAction)
-     this.tasksItems[this.activeId] = this.activeModalValue
-     this.closeModal()
-    } else {
-     this.action == 'edit'
-     this.historyChanges(data)
-     this.openModal(this.action, data.categoryId, data.taskId)
-     return
-    }
+    // else if (this.action == 'edit') {
+    //  this.historyChanges(data)
+    //  this.activeModalValue.updateAt.push(this.historyAction)
+    //  this.tasksItems[this.activeId] = this.activeModalValue
+    //  this.closeModal()
+    // } else {
+    //  this.action == 'look'
+    //  this.historyChanges(data)
+    //  this.openModal(this.action, data.categoryId, data.taskId)
+    //  return
+    // }
    }
    return
   },
@@ -257,6 +265,25 @@ export const useTasksItemsStore = defineStore({
   },
   deleteTask(taskId) {
    this.tasksItems.splice(taskId, 1)
+   this.filteredTask(this.searchTaskParams)
+  },
+  filteredTask(keyVal) {
+   this.searchTaskParams = keyVal
+   this.filteredTaskItems = []
+   //this.tasksItems.forEach((item) => {
+   for (let i = 0; i < this.tasksItems.length; i++) {
+    if (this.tasksItems[i].title.includes(keyVal) || this.tasksItems[i].description.includes(keyVal)) {
+     this.filteredTaskItems.push(this.tasksItems[i]);
+    }
+   }
+   return this.filteredTaskItems;
+
+   // console.log('%c%s', 'color: #364cd9', item.title);
+   // console.log('%c%s', 'color: #364cd9', item.title.includes(keyVal) || item.description.includes(keyVal));
+   //  if (item.title.includes(keyVal) || item.description.includes(keyVal)) {
+   //   return item
+   //  }
+   // })
   }
  }
 
