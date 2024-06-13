@@ -5,6 +5,7 @@ export const useTasksItemsStore = defineStore({
  state: () => ({
   tasksItems: [
    {
+    id: 0,
     title: 'Разработать минимальный набор для менеджера задач',
     description: 'Функционал: добавление, удаление, получение списка задач, получение одной записи, изменение записи. Запись должна состоять из следующих полей: заголовок, описание, время создания, время изменения, маркер выполнения.',
     categoryId: 0,
@@ -17,6 +18,7 @@ export const useTasksItemsStore = defineStore({
     isDone: true
    },
    {
+    id: 1,
     title: 'Тестовая задача',
     description: 'Создана для наполнения.',
     categoryId: 0,
@@ -29,6 +31,7 @@ export const useTasksItemsStore = defineStore({
     isDone: false
    },
    {
+    id: 2,
     title: 'Доработать проект',
     description: 'Добавить группировку задач по категориям, возможность добавления подзадач, расстановки приоритетов.',
     categoryId: 1,
@@ -42,6 +45,7 @@ export const useTasksItemsStore = defineStore({
    },
   ],
   newItem: {
+   id: null,
    title: '',
    description: '',
    categoryId: null,
@@ -111,9 +115,9 @@ export const useTasksItemsStore = defineStore({
   statusDone(taskId) {
    let actions = {}
    if (this.tasksItems[taskId].isDone) {
-    actions.upIsDone = 'Задача отмечена как невыполненная.'
-   } else {
     actions.upIsDone = 'Задача отмечена как выполненная.'
+   } else {
+    actions.upIsDone = 'Задача отмечена как невыполненная.'
    }
    this.historyAction.id = this.tasksItems[taskId].updateAt?.length
    this.historyAction.dateChange = this.getNow()
@@ -220,7 +224,7 @@ export const useTasksItemsStore = defineStore({
 
     if (this.action == 'add') {
      this.activeModalValue.createAt = this.getNow()
-     // this.activeModalValue.id = this.tasksItems.length
+     this.activeModalValue.id = this.tasksItems.length
      this.tasksItems.push(this.activeModalValue)
      this.closeModal()
      this.filteredTask(this.searchTaskParams)
@@ -270,20 +274,10 @@ export const useTasksItemsStore = defineStore({
   filteredTask(keyVal) {
    this.searchTaskParams = keyVal
    this.filteredTaskItems = []
-   //this.tasksItems.forEach((item) => {
-   for (let i = 0; i < this.tasksItems.length; i++) {
-    if (this.tasksItems[i].title.includes(keyVal) || this.tasksItems[i].description.includes(keyVal)) {
-     this.filteredTaskItems.push(this.tasksItems[i]);
-    }
-   }
+   this.tasksItems.forEach((item) => {
+    if (item.title.includes(keyVal) || item.description.includes(keyVal)) this.filteredTaskItems.push(item)
+   })
    return this.filteredTaskItems;
-
-   // console.log('%c%s', 'color: #364cd9', item.title);
-   // console.log('%c%s', 'color: #364cd9', item.title.includes(keyVal) || item.description.includes(keyVal));
-   //  if (item.title.includes(keyVal) || item.description.includes(keyVal)) {
-   //   return item
-   //  }
-   // })
   }
  }
 

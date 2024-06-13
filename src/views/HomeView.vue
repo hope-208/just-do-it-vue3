@@ -8,22 +8,24 @@
         </el-icon> Добавить задачу
       </el-button>
     </el-row>
-    <el-scrollbar height="calc(100vh - 140px)">
-      <el-col class="task-container">
-        <el-input v-model="searchTask" placeholder="Введите ключевое слово для поиска по задачам" prefix-icon="Search"
+    
+      <el-col class="page-container">
+        <el-input v-model="searchTask" class="task-search" placeholder="Введите ключевое слово для поиска по задачам" prefix-icon="Search"
           clearable @input="filteredTask(searchTask)" autofocus />
-        <div v-if="searchTask == ''">
-          <task-item v-for="(item, key) in tasksItems" :key="key" :task="key" :task-info="item" />
+       <el-scrollbar class="scroll-container" height="calc(100vh - 200px)">   
+        <div v-if="searchTask == ''" class="task-container">
+          <task-item v-for="(item, key) in tasksItems" :key="key" :task="item.id" :task-info="item" />
 
         </div>
-        <div v-if="searchTask !== ''">
-          <task-item v-for="(item, key) in filteredTaskItems" :key="item" :task="key" :task-info="item" />
+        <div v-else  class="task-container">
+          <task-item v-for="(item, key) in filteredTaskItems" :key="key" :task="item.id" :task-info="item" />
         </div>
         <el-text v-if="tasksItems.length == 0 && filteredTaskItems.length == 0">Задачи отсутствуют.</el-text>
         <el-text v-if="filteredTaskItems.length == 0 && searchTask !== ''">Задачи не найдены. Измените поисковый
           запрос и повторите попытку.</el-text>
+         </el-scrollbar> 
       </el-col>
-    </el-scrollbar>
+    
     <add-modal-task ref="refAddModalTask" />
     <look-modal-task ref="refModalTask" :modalValue="activeModalValue" />
 

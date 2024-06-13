@@ -1,18 +1,18 @@
 <template>
-  <el-card class="task" v-model="taskId">
+  <el-card class="task">
+    <el-form ref="refTask" :model="taskForm" :rules="rulesTask">
     <el-row class="task__content">
       <el-col :span="1" style="max-width: 20px;">
-        <el-checkbox v-model="taskForm.isDone" @change="statusDone(task)" class="task__check" />
+        <el-checkbox v-model="tasksItems[task].isDone" @change="statusDone(task)" class="task__check" />
       </el-col>
       <el-col :span="23">
-        <el-form ref="refTask" :model="taskForm" :rules="rulesTask">
           <el-row>
             <el-form-item prop="title" class="task__edit">
               <el-input v-if="tasksItems[task].editableTitle" v-model="taskForm.title" class='task-name-edit'
                 @blur="statusEditableTitle(task, taskForm.title)" v-focus clearable :minlength="3" />
               <el-popover placement="bottom" :width="250" trigger="hover" content="Нажмите, чтобы отредактировать.">
                 <template #reference>
-                  <el-text v-if="!tasksItems[task].editableTitle" style="font-weight: 600; cursor: pointer"
+                  <el-text v-if="!tasksItems[task].editableTitle" class="task__title" 
                     @click="statusEditableTitle(task)">{{ taskForm.title
                     }}</el-text>
                 </template>
@@ -47,7 +47,6 @@
               </template>
             </el-popover>
           </el-form-item>
-        </el-form>
         <el-row style="display: flex; justify-content: end;">
           <el-text v-if="tasksItems[task].updateAt.length == 0" style="cursor: default">Создано:
             {{ tasksItems[task].createAt }}</el-text>
@@ -58,6 +57,7 @@
 
       </el-col>
     </el-row>
+    </el-form>
   </el-card>
 
 </template>
