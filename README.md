@@ -1,14 +1,11 @@
 # just-do-it-vue3
 
-This template should help get you started developing with Vue 3 in Vite.
+Проект включает минимальный набор функциональности менеджера задач.
+Реализован с помощью Vue 3, Element Plus, Pinia и Vite.
 
-## Recommended IDE Setup
+## Демонстрационная версия доступна по ссылке:
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+[https://hope-208.github.io/just-do-it-vue3/](https://hope-208.github.io/just-do-it-vue3/).
 
 ## Project Setup
 
@@ -26,10 +23,4 @@ npm run dev
 
 ```sh
 npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
