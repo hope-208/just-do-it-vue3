@@ -10,25 +10,27 @@
             <el-form-item prop="title" class="task__edit">
               <el-input v-if="tasksItems[task].editableTitle" v-model="taskForm.title" class='task-name-edit'
                 @blur="statusEditableTitle(task, taskForm.title)" v-focus clearable :minlength="3" />
-              <el-popover placement="bottom" :width="250" trigger="hover" content="Нажмите, чтобы отредактировать.">
-                <template #reference>
+              <!-- <el-popover placement="bottom" :width="250" trigger="hover" content="Нажмите, чтобы отредактировать.">
+                <template #reference> -->
                   <el-text v-if="!tasksItems[task].editableTitle" class="task__title" 
                     @click="statusEditableTitle(task)">{{ taskForm.title
                     }}</el-text>
-                </template>
-              </el-popover>
+                <!-- </template>
+              </el-popover> -->
             </el-form-item>
             <div class="task__btns">
               <el-popover placement="bottom" :width="95" trigger="hover" content="Просмотр">
                 <template #reference>
-                  <el-icon class="task__btn" :size="18">
-                    <Notification @click="openModal('look', task)" />
+                  <el-icon class="task__btn" :size="18" @click="deleteTask(tasksItems, task)">
+                    <icon name="info" class="task__btn" @click="openModal('look', task)"/>
                   </el-icon>
+                  <!-- <icon name="info" class="el-icon task__btn" @click="openModal('look', task)"/> -->
                 </template>
               </el-popover>
+              
               <el-popover placement="bottom" :width="80" trigger="hover" content="Удалить">
                 <template #reference>
-                  <el-icon class="task__btn" :size="18" @click="deleteTask(tasksItems, task)">
+                  <el-icon class="task__btn" :size="18" @click="deleteTask(tasksItems, task)" color="#f56c6c">
                     <Delete />
                   </el-icon>
                 </template>
@@ -38,14 +40,14 @@
           <el-form-item prop="description" class="task__edit">
             <el-input v-if="tasksItems[task].editableDesc" type="textarea" v-model="taskForm.description"
               class='task-name-edit' @blur="statusEditableDesc(task, taskForm.description)" v-focus />
-            <el-popover placement="bottom" :width="250" trigger="hover" content="Нажмите, чтобы отредактировать.">
-              <template #reference>
+            <!-- <el-popover placement="bottom" :width="250" trigger="hover" content="Нажмите, чтобы отредактировать.">
+              <template #reference> -->
                 <el-text v-if="!tasksItems[task].editableDesc" @click="statusEditableDesc(task)"
-                  style="cursor: pointer">{{
+                  class="task__desk"> {{
                     tasksItems[task].description
                   }}</el-text>
-              </template>
-            </el-popover>
+              <!-- </template>
+            </el-popover> -->
           </el-form-item>
         <el-row style="display: flex; justify-content: end;">
           <el-text v-if="tasksItems[task].updateAt.length == 0" style="cursor: default">Создано:
@@ -67,8 +69,11 @@ import { storeToRefs } from 'pinia'
 import {
   useTasksItemsStore
 } from '@/stores/TaskItemsStore'
+import Icon from '@/components/CustomIcon.vue'
+
 export default {
   name: 'TaskItem',
+  components: {Icon},
   props: {
     task: Number,
     taskInfo: Object

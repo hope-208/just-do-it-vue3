@@ -98,7 +98,12 @@ justify-content: space-between;
 
 .task__title {
   font-weight: 600; 
-  cursor: pointer;
+  cursor: url(./icon/pen.png), pointer;
+  /* cursor: url(./icon/pen.svg), pointer; */
+}
+
+.task__desk {
+  cursor: url(./icon/pen.png), pointer;
 }
 
 .el-text {

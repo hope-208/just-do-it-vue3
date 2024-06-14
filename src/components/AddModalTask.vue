@@ -13,7 +13,7 @@
 
       <el-form-item class="form-label" label="Описание" prop="description">
         <el-input v-model="taskForm.description" :rows="3" type="textarea" placeholder="Введите описание задачи"
-          :autofocus="false" />
+         />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -28,67 +28,67 @@
 </template>
 
 <script>
-  import {
-    storeToRefs
-  } from 'pinia'
-  import {
-    useTasksItemsStore
-  } from '@/stores/TaskItemsStore'
-  export default {
-    name: 'AddModalTask',
-    data() {
-      return {
-        taskForm: {
-          title: '',
-          description: ''
-        },
-        rulesTask: {
-          title: [{
-            required: true,
-            message: 'Название задачи не может быть пустым.',
-            trigger: 'blur'
-          }],
-          description: [{
-            required: true,
-            message: 'Описание задачи не может быть пустым.',
-            trigger: 'blur'
-          }],
-        }
-      }
-    },
-    setup() {
-      const storeTasksItems = useTasksItemsStore()
-      const {
-        isOpenModalEdit,
-        titleModal,
-        btnModal
-      } = storeToRefs(storeTasksItems)
-      const {
-        closeModal,
-        saveModalData
-      } = storeTasksItems
-      return {
-        isOpenModalEdit,
-        titleModal,
-        btnModal,
-        closeModal,
-        saveModalData
-      }
-    },
-    methods: {
-      submitForm() {
-        this.$refs.refTaskForm.validate((valid) => {
-          if (!valid) {
-            return
-          } else {
-            this.resetForm()
-          }
-        })
+import {
+  storeToRefs
+} from 'pinia'
+import {
+  useTasksItemsStore
+} from '@/stores/TaskItemsStore'
+export default {
+  name: 'AddModalTask',
+  data() {
+    return {
+      taskForm: {
+        title: '',
+        description: ''
       },
-      resetForm() {
-        this.$refs.refTaskForm.resetFields()
-        this.$refs.refTaskForm.clearValidate()
+      rulesTask: {
+        title: [{
+          required: true,
+          message: 'Название задачи не может быть пустым.',
+          trigger: 'blur'
+        }],
+        description: [{
+          required: true,
+          message: 'Описание задачи не может быть пустым.',
+          trigger: 'blur'
+        }],
       }
     }
+  },
+  setup() {
+    const storeTasksItems = useTasksItemsStore()
+    const {
+      isOpenModalEdit,
+      titleModal,
+      btnModal
+    } = storeToRefs(storeTasksItems)
+    const {
+      closeModal,
+      saveModalData
+    } = storeTasksItems
+    return {
+      isOpenModalEdit,
+      titleModal,
+      btnModal,
+      closeModal,
+      saveModalData
+    }
+  },
+  methods: {
+    submitForm() {
+      this.$refs.refTaskForm.validate((valid) => {
+        if (!valid) {
+          return
+        } else {
+          this.resetForm()
+        }
+      })
+    },
+    resetForm() {
+        this.$refs.refTaskForm.resetFields()
+        this.$refs.refTaskForm.clearValidate()
+    }
   }
+}
 </script>
